@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html >
+<head>
+  <meta charset="UTF-8">
+  <title>Deployment Tutorial 1</title>
+  <link href='https://fonts.googleapis.com/css?family=Pacifico' rel='stylesheet' type='text/css'>
+<link href='https://fonts.googleapis.com/css?family=Arimo' rel='stylesheet' type='text/css'>
+<link href='https://fonts.googleapis.com/css?family=Hind:300' rel='stylesheet' type='text/css'>
+<link href='https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300' rel='stylesheet' type='text/css'>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  
+</head>
+
+<body style="background: #000;">
+ <div class="login">
+	<h1>Ingenisense Simulation</h1>
+
+     <!-- Main Input For Receiving Query to our ML -->
+    <form action="{{ url_for('show_predict')}}"method="post">
+
+      <label for="analysis_type">Analysis Type:</label>
+      <select name="analysis_type" id="analysis_type" onchange="checkAlert(event)">
+        <option disabled selected value> -- select an option -- </option>
+        <option value="0">Remaining Useful Life</option>
+        <option value="1">Anomaly Detection</option>
+      </select>
+      <br>
+      <br>
+      
+      <label for="model_name">Model Name:</label>
+      <select name="model_name" id="model_name">
+        <option disabled selected value> -- select an option -- </option>
+      </select>
+      <br>
+      <br>
+
+      <label for="data">Data Name:</label>
+      <select name="data" id="data">
+        <option disabled selected value> -- select an option -- </option>
+      </select>
+
+      <br>
+      <br>
+      <button type="submit" class="btn btn-primary btn-block btn-large">Show prediction results</button>
+    </form>
+
+   <br>
+   <br>
+   {{ prediction_text }}
+
+ </div>
+ <script>
+   function checkAlert(evt){
+    if(evt.target.value === "0"){
+
+      var model = ["dnn", "dcnn", "lstm"];
+      var data = ["FD001", "FD004", "FD003", "FD004"];
+
+      document.getElementById("model_name").innerHTML = "";
+      for (i = 0; i < model.length; i++) {
+        var opt = document.createElement("option");
+        document.getElementById("model_name").innerHTML += '<option id="' + model[i] + '">' + model[i] + '</option>';
+      }
+
+      document.getElementById("data").innerHTML = "";
+      for (i = 0; i < data.length; i++) {
+        var opt = document.createElement("option");
+        document.getElementById("data").innerHTML += '<option id="' + data[i] + '">' + data[i] + '</option>';
+      }
+
+    }
+    if(evt.target.value === "1"){
+
+      var model = ["lstm_ae", "svm"];
+      var data = ["power_demand"];
+
+      document.getElementById("model_name").innerHTML = "";
+      for (i = 0; i < model.length; i++) {
+        var opt = document.createElement("option");
+        document.getElementById("model_name").innerHTML += '<option id="' + model[i] + '">' + model[i] + '</option>';
+      }
+
+      document.getElementById("data").innerHTML = "";
+      for (i = 0; i < data.length; i++) {
+        var opt = document.createElement("option");
+        document.getElementById("data").innerHTML += '<option id="' + data[i] + '">' + data[i] + '</option>';
+      }
+
+    }
+   }
+ </script>
+</body>
+</html>

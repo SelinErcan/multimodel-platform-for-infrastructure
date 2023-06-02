@@ -1,0 +1,61 @@
+version: '3'
+services: 
+  web:
+    build: ./web
+    ports: 
+      - "5000:5000"
+    networks: 
+      - api.network
+
+    depends_on: 
+      - dcnn
+      - dnn
+      - lstm
+      - lstm-ae
+      - svm
+
+    restart: always
+    container_name: web
+    
+  dcnn:
+    # It will look for a dockerfile in the project root and build it
+    build: "./DCNN"
+    # If the container goes down, it will restart
+    restart: "always"
+    # Connects the API to a common api.network bridge
+    container_name: dcnn
+    networks: 
+      - api.network
+        
+  dnn:
+    build: "./DNN"
+    restart: "always"
+    container_name: dnn
+    networks: 
+      - api.network
+
+  lstm:
+    build: "./LSTM"
+    restart: "always"
+    container_name: lstm
+    networks: 
+      - api.network
+
+  lstm-ae:
+    build: "./LSTM-AE"
+    restart: "always"
+    container_name: lstm_ae
+    networks: 
+      - api.network
+
+  svm:
+    build: "./SVM"
+    restart: "always"
+    container_name: svm
+    networks: 
+      - api.network
+    
+# declares network used to connect all the apps
+networks: 
+    api.network:
+      driver: bridge
